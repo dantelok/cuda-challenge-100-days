@@ -42,7 +42,6 @@ int main() {
     // kind: host -> host; host -> device; device -> host; device -> device; 
     cudaMemcpy(device_a, host_A, size, cudaMemcpyHostToDevice);
     cudaMemcpy(device_b, host_B, size, cudaMemcpyHostToDevice);
-    cudaMemcpy(device_c, host_C, size, cudaMemcpyHostToDevice);
 
     // Define grid and block dimension
     int num_blocks = (N + BLOCK_SIZE - 1) / BLOCK_SIZE;
