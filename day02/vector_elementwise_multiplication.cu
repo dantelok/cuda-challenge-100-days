@@ -4,10 +4,11 @@
 
 #define N 10000
 #define BLOCK_SIZE 256
+#define EPSILON 1e-6
 
 // CPU matrix multiplication
 void vector_elementwise_multiplication_cpu(double *a, double *b, double *c, int n) {
-    for (int i = 0; i <= n; i++){
+    for (int i = 0; i < n; i++){
         c[i] = a[i] * b[i];
     }
 }
@@ -61,7 +62,7 @@ int main(){
     cudaMemcpy(device_b, host_B, size, cudaMemcpyHostToDevice);
 
     // Define grid and block dimension
-    int num_blocks = (N + BLOCK_SIZE + 1) / BLOCK_SIZE;
+    int num_blocks = (N + BLOCK_SIZE - 1) / BLOCK_SIZE;
 
     // Warm up run
     for (int i = 0; i < 5; i++) {
@@ -85,6 +86,7 @@ int main(){
     for (int i = 0; i < 100; i++) {
         double start_time = get_time();
         vector_elementwise_multiplication_gpu<<<num_blocks, BLOCK_SIZE>>>(device_a, device_b, device_c, N);
+        cudaDeviceSynchronize(); // Ensure the kernel finishes execution before timing
         double end_time = get_time();
         time_used_gpu += end_time - start_time;
     }
@@ -100,7 +102,7 @@ int main(){
     int match = 1;
     for (int i = 0; i < N; i++) {
         printf("CPU: c[%d] = %f; GPU: c[%d] = %f\n", i, host_C_cpu[i], i, host_C_gpu[i]);
-        if (host_C_cpu[i] - host_C_gpu[i] > 0) {
+        if (host_C_cpu[i] - host_C_gpu[i] > EPSILON) {
             match = 0;
         }
     }
