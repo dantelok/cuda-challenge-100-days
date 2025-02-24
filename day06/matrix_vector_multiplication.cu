@@ -28,10 +28,8 @@ void init_vector(double *vector, int n) {
 }
 
 void init_matrix(double *matrix, int m, int n) {
-    for (int i = 0; i < m; i++) {
-        for (int j = 0; j < n; j++){
-            matrix[i * n + j] = (double)rand() / RAND_MAX;
-        }
+    for (int i = 0; i < m * n; i++) {
+            matrix[i] = (double)rand() / RAND_MAX;
     }
 }
 
