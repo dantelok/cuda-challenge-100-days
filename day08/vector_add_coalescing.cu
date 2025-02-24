@@ -16,10 +16,16 @@ __global__ void vector_addition_coalesced(double *a, double *b, double *c, int n
 // Introduce stride to make vector operations uncoalesced
 __global__ void vector_addition_uncoalesced(double *a, double *b, double *c, int n) {
     int id = blockIdx.x * blockDim.x + threadIdx.x;
+    // id is counting from 0 to BLOCK_SIZE = 256
     
     int stride = 32;  // stride needs to be large enough to break coalescing
     // the L1/L2 cache can handle the difference if the stride is too small 
 
+    // thread 0: 0 -> 32 -> 64 -> ...
+    // thread 1: 1 -> 33 -> 65 -> ...
+    // thread 2: 2 -> 34 -> 66 -> ...
+    // ...
+    // thread 255: 255 -> 287 -> 319 -> ...
     for (int i = id; i < n; i += stride) {  
         c[i] = a[i] + b[i];  
     }
