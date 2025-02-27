@@ -5,6 +5,8 @@
 #define N 10000
 #define BLOCK_SIZE 256
 
+// Warp size default 32
+
 __global__ void vector_addition_conditional(double *a, double *b, double *c, int n) {
     int id = blockIdx.x * blockDim.x + threadIdx.x;
     // Causes warp divergence
@@ -21,12 +23,15 @@ __global__ void vector_addition_no_divergence(double *a, double *b, double *c, i
     int id = blockIdx.x * blockDim.x + threadIdx.x;
     // No branch, avoids divergence
     if (id < n) {
-        double modifier = 0.0;
-        if (a[id] > 0.5) {
-            modifier = 1.0;
-        } else {
-            modifier = -1.0;
-        }
+        // Set if-else before memory access
+        // double modifier = 0.0;
+        // if (a[id] > 0.5) {
+        //     modifier = 1.0;
+        // } else {
+        //     modifier = -1.0;
+        // }
+        double modifier = (a[id] > 0.5) ? 1.0 : -1.0;  // Even faster
+        // No branch: Remove if-else from the calculation
         c[id] = a[id] + modifier * b[id];
     }
 }
