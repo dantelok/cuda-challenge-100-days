@@ -6,7 +6,7 @@
 #define K 128
 #define N 128
 
-// ✅ Naïve Matrix Multiplication
+// Naïve Matrix Multiplication
 __global__ void matrix_multiplication(double *A, double *X, double *Y, int m, int k, int n) {
     int row = blockIdx.y * blockDim.y + threadIdx.y;
     int col = blockIdx.x * blockDim.x + threadIdx.x;
@@ -20,7 +20,7 @@ __global__ void matrix_multiplication(double *A, double *X, double *Y, int m, in
     }
 }
 
-// ✅ Tiled Matrix Multiplication
+// Tiled Matrix Multiplication
 __global__ void tiled_matrix_multiplication(double *A, double *X, double *Y, int m, int k, int n, int BLOCK_SIZE) {
     extern __shared__ double shared[];
     double* shared_A = shared;
@@ -54,7 +54,7 @@ __global__ void tiled_matrix_multiplication(double *A, double *X, double *Y, int
         Y[row * N + col] = sum;
 }
 
-// ✅ Timing Function
+// Timing Function
 double get_time() {
     struct timespec ts;
     clock_gettime(CLOCK_MONOTONIC, &ts);
@@ -86,7 +86,7 @@ void test_matrix_multiplication(int BLOCK_SIZE) {
 
     double start_time, end_time;
 
-    // ✅ Naïve Matrix Multiplication
+    // Naïve Matrix Multiplication
     dim3 blockDim(BLOCK_SIZE, BLOCK_SIZE);
     dim3 gridDim((M + BLOCK_SIZE - 1) / BLOCK_SIZE, (N + BLOCK_SIZE - 1) / BLOCK_SIZE);
 
@@ -96,7 +96,7 @@ void test_matrix_multiplication(int BLOCK_SIZE) {
     end_time = get_time();
     printf("BLOCK_SIZE %d - Naïve MatMul Execution Time: %f ms\n", BLOCK_SIZE, (end_time - start_time) * 1000);
 
-    // ✅ Tiled Matrix Multiplication
+    // Tiled Matrix Multiplication
     start_time = get_time();
     tiled_matrix_multiplication<<<gridDim, blockDim, 2 * BLOCK_SIZE * BLOCK_SIZE * sizeof(double)>>>(
         device_A, device_X, device_Y, M, K, N, BLOCK_SIZE);
