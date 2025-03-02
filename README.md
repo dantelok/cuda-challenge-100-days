@@ -38,6 +38,11 @@ Write a kernel with conditional branches, then refactor it to minimize warp dive
 
 **Day 11: Profile a Kernel Using CUDA Tools**  
 Run your matrix multiplication kernel with `nvprof` or Nsight Systems. Record key metrics like execution time and memory throughput.
+Here we got no coding but only compilation work, so I add a bit more on day 11.
+
+**Day 11 (New): Implement Tokenization and Word Embeddings on CUDA**
+Implement a basic tokenization algorithm on CUDA and map tokens to embeddings using GPU memory.
+Parallelize embedding lookup using CUDA kernels and compare CPU vs GPU performance.
 
 **Day 12: Experiment with Grid and Block Configurations**  
 Vary the grid/block sizes of your matrix multiplication kernel to find the optimal configuration. Record performance changes.
