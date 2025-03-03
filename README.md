@@ -56,257 +56,293 @@ Improve your reduction kernel by performing intra-block reduction in shared memo
 **Day 15: Exclusive Prefix Sum (Scan) Kernel**  
 Implement an exclusive scan (prefix sum) algorithm on an array using shared memory.
 
-**Day 16: Parallel Bitonic Sort for a Small Dataset**  
-Write a kernel to sort an array (e.g., 1024 integers) using the bitonic sort algorithm.
+**Until day 15, I found that the previous challenge got a lot of overlapping work on similar concepts. 
+So I asked ChatGPT to generate a new challenges roadmap from day 16, focusing more on AI applications, including NLP, Computer Visions, Voice processing, and Reinforcement Learning.**
 
-**Day 17: Atomic Counter with Atomic Operations**  
-Create a kernel where many threads increment a global counter using atomic operations. Verify the final count.
+## **Foundational AI Operations in CUDA**
+### **Day 16: Fast Tokenization on CUDA**
+- Implement a GPU-accelerated subword tokenizer (e.g., BPE or WordPiece).
+- Compare speed against Hugging Face’s tokenizer.
 
-**Day 18: Histogram Computation Using Atomic Operations**  
-Implement a histogram kernel that tallies occurrences in an array. Use atomic operations to update histogram bins.
+### **Day 17: Efficient Word Embedding Lookup on GPU**
+- Implement an optimized CUDA kernel for embedding lookup.
+- Optimize memory access patterns for minimal latency.
 
-**Day 19: Dynamic Parallelism**  
-Write a kernel that conditionally launches another kernel using dynamic parallelism. Verify that the child kernel executes correctly.
+### **Day 18: GPU Accelerated Softmax with Stability Fix**
+- Implement softmax using CUDA.
+- Fix numerical instability using the **log-sum-exp trick**.
 
-**Day 20: Asynchronous Memory Copy with CUDA Streams**  
-Implement host-to-device and device-to-host transfers using `cudaMemcpyAsync` in a stream. Measure the benefit over synchronous copies.
+### **Day 19: Fast Layer Normalization Kernel**
+- Implement layer normalization using **parallel reduction**.
 
-**Day 21: Overlap Data Transfers and Kernel Execution**  
-Use multiple CUDA streams to overlap data transfer with kernel execution in a simple application (e.g., vector addition).
+### **Day 20: Matrix Multiplication Optimized for Deep Learning (Tensor Cores if available)**
+- Implement a **CUDA GEMM (General Matrix Multiplication)** kernel optimized for FP16 Tensor Cores.
 
-**Day 22: Unified Memory Example**  
-Convert one of your previous tasks (e.g., vector addition) to use Unified Memory (`cudaMallocManaged`). Compare simplicity and performance.
+---
 
-**Day 23: Image Processing – RGB to Grayscale Conversion**  
-Implement a kernel that converts an RGB image (stored as an array) to grayscale using the standard formula.
+## **Transformer Blocks & Sequence Processing**
+### **Day 21: Multi-Head Self-Attention (Naïve Version)**
+- Implement a basic self-attention kernel with CUDA.
+- Handle variable-length sequences efficiently.
 
-**Day 24: Image Convolution – Box Blur Filter**  
-Write a kernel that applies a 3×3 box blur to an image. Handle image borders appropriately.
+### **Day 22: Efficient Multi-Head Attention with Shared Memory**
+- Optimize self-attention using shared memory and tiling.
 
-**Day 25: Image Edge Detection – Sobel Filter**  
-Implement a Sobel edge detection kernel. Compute horizontal and vertical gradients and combine them to detect edges.
+### **Day 23: Transformer Feedforward Layer with CUDA**
+- Implement a **2-layer MLP with GELU activation** for Transformer models.
 
-**Day 26: Use Texture Memory in the Sobel Filter**  
-Modify your Sobel filter kernel to read the input image via texture memory. Compare the performance with global memory access.
+### **Day 24: LayerNorm + Self-Attention + FFN on GPU**
+- Integrate previous optimizations into a full Transformer encoder block.
 
-**Day 27: Optimize Image Convolution Using Texture Memory**  
-Rewrite your box blur kernel to leverage texture caching, and measure the performance improvement.
+### **Day 25: CUDA Kernels for LLM Inference Acceleration**
+- Implement **fast rotary position embeddings** (RoPE) for Llama models.
+- Optimize with warp shuffles.
 
-**Day 28: Compare Global, Shared, and Register Memory Access**  
-Create simple kernels that read data from global memory, shared memory, and registers. Measure and compare their latencies.
+---
 
-**Day 29: Matrix Transposition with Coalesced Access**  
-Implement a kernel to transpose a matrix. Use shared memory to achieve coalesced global memory accesses during the transpose.
+## **Vision Transformers & Large-Scale Processing**
+### **Day 26: Image Patching with CUDA for ViTs**
+- Implement a CUDA kernel to extract **non-overlapping patches** from an image.
 
-**Day 30: Reduction with Warp Shuffle Intrinsics**  
-Modify your reduction kernel to use warp shuffle functions (e.g., `__shfl_down_sync`) for the final stage of reduction within a warp.
+### **Day 27: Vision Transformer Attention Optimization**
+- Modify your attention kernel to support image-based **ViT models**.
 
-**Day 31: Full Warp-Level Reduction**  
-Implement a kernel that performs an entire reduction using only warp-level primitives (no shared memory for the final step).
+### **Day 28: CUDA Optimized Convolution for CNNs**
+- Implement a **2D convolution kernel with shared memory**.
 
-**Day 32: Optimize Block Size Using the CUDA Occupancy Calculator**  
-Experiment with different block sizes using the Occupancy Calculator to maximize occupancy for one of your kernels.
+### **Day 29: Depthwise & Separable Convolution for Mobile AI**
+- Implement **depthwise + pointwise** convolution kernels.
 
-**Day 33: Monte Carlo Simulation – Estimating Pi (Initial Version)**  
-Implement a kernel where each thread generates random points to estimate Pi using the Monte Carlo method. Sum the results using reduction.
+### **Day 30: FP16 and INT8 Quantization for Faster Inference**
+- Implement quantized matrix multiplication kernels.
 
-**Day 34: Optimize Monte Carlo Simulation**  
-Refine your Monte Carlo kernel to reduce branch divergence and minimize global memory accesses. Compare the estimated Pi value and runtime.
+---
 
-**Day 35: Thread-Level Pseudo-Random Number Generator**  
-Implement a simple per-thread pseudo-random number generator (e.g., a linear congruential generator) and integrate it into your Monte Carlo simulation.
+## **Reinforcement Learning & Generative AI**
+### **Day 31: Parallel MCTS for Reinforcement Learning on CUDA**
+- Implement **Monte Carlo Tree Search (MCTS)** on CUDA.
 
-**Day 36: Use Pinned (Page-Locked) Memory**  
-Modify one of your tasks to use pinned host memory (`cudaHostAlloc`) for faster data transfers. Benchmark the transfer speed.
+### **Day 32: Accelerated Reward Calculation for RL Agents**
+- Optimize parallel reward accumulation for RL environments.
 
-**Day 37: Zero-Copy Memory Example**  
-Implement an example that uses zero-copy memory, where the device directly accesses host-allocated memory. Validate its performance in a simple kernel.
+### **Day 33: GAN Training Optimizations in CUDA**
+- Implement CUDA-accelerated **upsampling** and **activation functions** for GANs.
 
-**Day 38: Kernel Timing with CUDA Events**  
-Write a wrapper that uses CUDA events to time the execution of any kernel. Use it to time your matrix multiplication kernel.
+### **Day 34: Diffusion Model Sampling Optimization**
+- Implement a **parallel U-Net step** for diffusion models.
 
-**Day 39: Benchmark a Kernel with CUDA Events**  
-Profile a previously written kernel (e.g., matrix multiplication) using your timing wrapper and experiment with different parameters.
+### **Day 35: Faster Text-to-Image Sampling on CUDA**
+- Optimize DDIM/SDE sampling.
 
-**Day 40: Concurrent Kernel Execution Using Multiple Streams**  
-Launch two independent kernels concurrently on separate streams. Ensure correct synchronization and compare execution times.
+---
 
-**Day 41: Query and List GPU Device Properties**  
-Write a host program that queries the number of available GPUs and prints properties (e.g., memory, cores) using `cudaGetDeviceProperties`.
+## **Multi-GPU Training & Large Models**
+### **Day 36: Implement Data Parallel Training on Multi-GPU**
+- Implement **gradient averaging across multiple GPUs**.
 
-**Day 42: Multi-GPU Vector Addition**  
-Split the work for vector addition across two GPUs. Allocate separate device memory on each GPU, execute kernels, and merge results.
+### **Day 37: Pipeline Parallelism for Large Transformers**
+- Split Transformer layers across GPUs.
 
-**Day 43: 2D Convolution for Neural Network Forward Pass**  
-Implement a kernel for 2D convolution (3×3 kernel) on an input matrix (simulating an image) to produce a feature map.
+### **Day 38: Zero Redundancy Optimizer (ZeRO) Implementation**
+- Implement **ZeRO Stage-1 optimizer** in CUDA.
 
-**Day 44: ReLU Activation Kernel**  
-Write a kernel that applies the ReLU function (max(0, x)) to every element of an input array.
+### **Day 39: Multi-GPU KV Caching for LLM Inference**
+- Implement **multi-GPU attention KV caching**.
 
-**Day 45: Fully Connected Layer Forward Pass**  
-Implement a kernel that performs the forward pass of a fully connected layer (matrix-vector multiplication plus bias addition).
+---
+## **Days 40-50: Train & Optimize a Full Transformer on CUDA**
+Goal: Implement a full **Transformer model** in CUDA, covering **embedding layers, attention mechanisms, feedforward layers, and inference optimizations**.
 
-**Day 46: Fully Connected Layer Backward Pass**  
-Implement a kernel to compute the gradients (error backpropagation) for a fully connected layer.
+### **Day 40: Implement Token and Positional Embeddings in CUDA**
+- Implement **BPE token embedding lookup** in CUDA.
+- Apply **rotary position embeddings** (RoPE) efficiently.
 
-**Day 47: Batch Normalization Forward Kernel**  
-Write a kernel to compute the mean and variance for a batch of data and normalize it (batch normalization forward pass).
+### **Day 41: Self-Attention Computation on CUDA**
+- Implement **scaled dot-product attention** with shared memory optimization.
+- Parallelize **softmax computation** using **warp intrinsics**.
 
-**Day 48: Dropout Layer Kernel**  
-Implement a dropout kernel that randomly sets a fraction of the input elements to zero and scales the remaining elements.
+### **Day 42: Multi-Head Attention Kernel Optimization**
+- Implement **multi-head attention** in CUDA.
+- Optimize **memory access patterns** to improve throughput.
 
-**Day 49: Add Robust CUDA Error Checking**  
-Create error-checking wrappers for CUDA API calls and integrate them into one of your existing projects.
+### **Day 43: Transformer Feedforward Layer with CUDA Optimization**
+- Implement **GELU activation function**.
+- Use **tiling for matrix multiplications** in feedforward layers.
 
-**Day 50: Custom Device Memory Pool Allocator**  
-Implement a simple memory pool allocator on the device to manage a preallocated buffer. Test it with small allocations/deallocations.
+### **Day 44: Full Transformer Block Implementation**
+- Integrate **attention, layer normalization, and feedforward network**.
+- Implement **parallel layer norm** with efficient memory access.
 
-**Day 51: Use Custom Allocator in a Reduction Kernel**  
-Integrate your custom memory pool into your reduction kernel for temporary storage allocation.
+### **Day 45: CUDA Kernel Fusion for Transformers**
+- Combine **matmul, layer norm, activation, and softmax** into a single fused kernel.
 
-**Day 52: Warp Shuffle Data Exchange Kernel**  
-Write a kernel that uses warp shuffle functions (e.g., `__shfl_xor_sync`) to exchange data among threads within a warp.
+### **Day 46: Mixed-Precision Training with Tensor Cores**
+- Optimize GEMM using **FP16 & Tensor Cores**.
+- Implement **automatic mixed-precision training**.
 
-**Day 53: Reduction Kernel with Cooperative Groups**  
-Implement a reduction kernel that leverages both warp shuffle and cooperative groups for intra-block synchronization.
+### **Day 47: Implement KV Cache Optimization for Fast Inference**
+- Implement **efficient key-value caching** for large LLM inference.
+- Optimize cache updates for batched queries.
 
-**Day 54: Basic Cooperative Groups Synchronization**  
-Write a kernel that groups threads using CUDA cooperative groups and synchronizes them to perform a simple computation.
+### **Day 48: Transformer Inference Optimization with FlashAttention**
+- Implement **FlashAttention** using shared memory and warp shuffles.
 
-**Day 55: Multi-Warp Reduction Using Cooperative Groups**  
-Modify your reduction kernel to use cooperative groups for synchronization across multiple warps in a block.
+### **Day 49: Implement CUDA-Optimized Transformer Training Loop**
+- Train a small Transformer from scratch.
+- Measure memory and speed improvements with profiling tools.
 
-**Day 56: Create a Simple CUDA Graph**  
-Implement a CUDA Graph that captures a sequence of kernel launches (e.g., vector addition followed by a reduction) and then execute it.
+### **Day 50: Profile Transformer Performance and Apply Further Optimizations**
+- Profile memory usage with **Nsight Compute**.
+- Optimize block/thread configurations and kernel occupancy.
 
-**Day 57: Update and Re-run a CUDA Graph**  
-Modify a parameter (such as array size or a constant value) in one kernel node within your CUDA Graph and re-run the graph.
+---
 
-**Day 58: Implement a New CUDA Math Intrinsic**  
-Use a new or less-common CUDA math intrinsic (e.g., fast math functions) in a small kernel. Compare its precision and speed with standard functions.
+## **Days 51-60: Train & Optimize a Diffusion Model on CUDA**
+Goal: Implement **Stable Diffusion** components and optimize **denoising** and **sampling** steps.
 
-**Day 59: Integrate New Math Functions into an Existing Kernel**  
-Update one of your kernels (e.g., Monte Carlo simulation) to use the new math intrinsics and evaluate the performance impact.
+### **Day 51: Implement a Simple Gaussian Noise Kernel**
+- Implement a kernel that generates **Gaussian noise** for diffusion training.
 
-**Day 60: 2D Particle System Simulation – Position Update**  
-Implement a kernel that updates 2D particle positions based on velocity and a timestep. Use arrays for positions and velocities.
+### **Day 52: CUDA-Optimized U-Net Block**
+- Implement **convolutions** and **skip connections** in CUDA.
 
-**Day 61: Particle System Optimization with Shared Memory**  
-Optimize your particle update kernel by tiling particle data into shared memory. Measure the speedup compared to the naïve version.
+### **Day 53: Implement a CUDA Kernel for Diffusion Timesteps**
+- Implement **variance scheduling** and **noising function**.
 
-**Day 62: Spatial Partitioning for Particles (Uniform Grid)**  
-Implement a kernel that assigns each particle to a cell in a uniform grid (spatial partitioning) to prepare for collision detection.
+### **Day 54: Implement Conditional Guidance for Diffusion Models**
+- Implement **classifier-free guidance (CFG)** for stable diffusion.
 
-**Day 63: Particle Collision Detection in Grid Cells**  
-Write a kernel that checks for collisions between particles within the same grid cell and marks or counts collisions.
+### **Day 55: Implement Efficient DDIM Sampling**
+- Optimize **Denoising Diffusion Implicit Models (DDIM)** sampling.
 
-**Day 64: Integrate Particle Update and Collision Detection**  
-Combine the kernels from Days 60–63 into a cohesive particle simulation where collisions affect particle velocities.
+### **Day 56: Optimize U-Net with Tensor Cores**
+- Use **FP16 mixed precision training** for speedup.
 
-**Day 65: Ray-Sphere Intersection Kernel**  
-Implement a kernel where each thread computes the intersection of a ray with a set of spheres. Output the distance to the closest intersection.
+### **Day 57: Memory Optimization for Large U-Net Models**
+- Implement **checkpointing and activation recomputation**.
 
-**Day 66: Basic CUDA Ray Tracer**  
-Develop a simple ray tracer that casts rays from a camera, uses your intersection kernel, and shades pixels based on surface normals.
+### **Day 58: Implement Multi-GPU Training for Diffusion Models**
+- Use **data parallel training** with multiple GPUs.
 
-**Day 67: Bounding Volume Hierarchy (BVH) Construction**  
-Implement a host-side BVH for a set of spheres and modify your ray tracer to traverse the BVH for faster intersection testing.
+### **Day 59: Implement CUDA Graphs for Efficient Sampling**
+- Use **CUDA Graphs** to reduce launch overhead in diffusion sampling.
 
-**Day 68: Optimize Ray Tracing with Parallel Reduction**  
-Use parallel reduction to determine the closest intersection per pixel in your ray tracer and compare it with your initial approach.
+### **Day 60: Benchmark and Optimize the Full Stable Diffusion Pipeline**
+- Compare different **sampling strategies** and **memory layouts**.
 
-**Day 69: Memory Access Optimization in Ray Tracing**  
-Reorder data structures and adjust memory access patterns in your ray tracer for better coalescing. Benchmark the improvements.
+---
 
-**Day 70: Asynchronous Data Transfers in a Complex Kernel**  
-Integrate `cudaMemcpyAsync` into your particle simulation to transfer data while the kernel is running, reducing idle time.
+## **Days 61-70: Build a CUDA-Optimized Reinforcement Learning Agent**
+Goal: Implement RL agents like **PPO, SAC, or DDPG** from scratch in CUDA.
 
-**Day 71: Double Buffering with CUDA Streams**  
-Implement double buffering in your simulation: while one buffer is processed by a kernel, asynchronously copy data into another buffer.
+### **Day 61: Implement Parallel Action Sampling for Reinforcement Learning**
+- Implement a CUDA kernel for **sampling actions from a probability distribution**.
 
-**Day 72: Compare Unified Memory vs. Explicit Memory Management**  
-Run a compute-intensive task (e.g., matrix multiplication) using both Unified Memory and explicit `cudaMalloc`/`cudaMemcpy` to compare performance.
+### **Day 62: Implement Parallel Environment Simulation**
+- Use **CUDA streams** to simulate **multiple environments** in parallel.
 
-**Day 73: Refactor a Project to Use Unified Memory Exclusively**  
-Convert one of your existing projects (e.g., image processing) to use Unified Memory and simplify the memory management code.
+### **Day 63: Implement a CUDA-Optimized Replay Buffer**
+- Optimize **experience replay** storage with efficient memory access.
 
-**Day 74: Profile a Kernel with Nsight Compute and Optimize**  
-Use Nsight Compute to profile your tiled matrix multiplication. Apply one or more optimizations (e.g., loop unrolling) based on the profile data.
+### **Day 64: Implement Parallel Advantage Estimation**
+- Compute **Generalized Advantage Estimation (GAE)** in parallel.
 
-**Day 75: Optimize a Challenging Kernel Further**  
-Select a kernel you’ve built (e.g., LU decomposition) and apply additional optimizations to maximize throughput and minimize latency.
+### **Day 65: CUDA-Optimized Policy Update for PPO**
+- Implement **gradient updates** with **CUDA-accelerated loss calculation**.
 
-**Day 76: 1D FFT Kernel Implementation**  
-Implement a basic 1D Fast Fourier Transform (FFT) kernel for a small dataset. Verify its correctness against a CPU FFT.
+### **Day 66: Implement TD3/SAC Policy Optimization with CUDA**
+- Implement **twin Q-learning updates** in CUDA.
 
-**Day 77: Extend FFT to 2D**  
-Build a 2D FFT by applying your 1D FFT kernel on rows and then columns of an image or matrix.
+### **Day 67: Multi-GPU Training for RL Algorithms**
+- Implement **distributed reinforcement learning** with multiple GPUs.
 
-**Day 78: Compare Your 2D FFT with cuFFT**  
-Integrate the cuFFT library for the same dataset and compare performance and accuracy with your 2D FFT implementation.
+### **Day 68: Optimize GPU Inference for RL Agents**
+- Implement **batched action inference** for fast decision-making.
 
-**Day 79: LU Decomposition Kernel**  
-Implement a kernel to perform LU decomposition on a small square matrix. Validate the decomposition with known results.
+### **Day 69: Implement Reward Shaping and Memory Optimizations**
+- Optimize how rewards are stored and updated in **CUDA memory**.
 
-**Day 80: Optimize LU Decomposition with Shared Memory**  
-Refine your LU decomposition kernel by using shared memory to speed up intermediate computations.
+### **Day 70: Benchmark RL Training Speed on CUDA**
+- Profile training speed **with and without CUDA optimizations**.
 
-**Day 81: Solve Linear Systems with LU Decomposition**  
-Implement forward and backward substitution kernels to solve Ax = b using the LU factors from Day 80.
+---
 
-**Day 82: Sparse Matrix-Vector Multiplication (CSR Format)**  
-Write a kernel for multiplying a sparse matrix (stored in CSR format) by a vector. Verify correctness with a dense multiplication.
+## **Days 71-80: Implement a CUDA-Optimized Speech Model**
+Goal: Implement a CUDA-accelerated **speech recognition** model.
 
-**Day 83: Optimize Sparse Matrix Kernel**  
-Improve your sparse matrix kernel by ensuring coalesced memory accesses and efficient load balancing across threads.
+### **Day 71: Implement a CUDA Kernel for MFCC Feature Extraction**
+- Compute **Mel-Frequency Cepstral Coefficients (MFCCs)** on CUDA.
 
-**Day 84: Breadth-First Search (BFS) on a Graph**  
-Implement a BFS kernel on a simple graph represented as an adjacency list. Validate the order of node traversal.
+### **Day 72: Implement a CUDA Kernel for Spectrogram Computation**
+- Compute **log-mel spectrograms** in parallel.
 
-**Day 85: Bellman-Ford Shortest Path Kernel**  
-Implement a kernel to compute shortest paths using the Bellman-Ford algorithm on a small weighted graph.
+### **Day 73: Implement a CUDA-Optimized Conformer Block**
+- Implement **Convolutional Self-Attention** in CUDA.
 
-**Day 86: Optimize Graph Algorithms for Sparse Graphs**  
-Refine your BFS or Bellman-Ford kernel for better performance on large, sparse graphs (optimize memory accesses and thread usage).
+### **Day 74: Implement CUDA-Optimized Beam Search for ASR Decoding**
+- Implement a fast **beam search decoder** with parallel processing.
 
-**Day 87: Conway’s Game of Life Kernel**  
-Implement a kernel that computes one iteration of Conway’s Game of Life on a 2D grid (e.g., 512×512 cells).
+### **Day 75: Implement CUDA-Optimized RNN-T Model**
+- Optimize **transducer models** with efficient memory access.
 
-**Day 88: Optimize Game of Life with Tiling and Shared Memory**  
-Optimize your Game of Life kernel by using shared memory tiling and handling borders efficiently.
+### **Day 76: Implement Mixed-Precision Training for Speech Models**
+- Optimize RNN/T models using **FP16 mixed precision**.
 
-**Day 89: 2D Convolution with Variable Kernel Sizes**  
-Implement a generalized 2D convolution kernel that supports different filter sizes and strides. Test it on synthetic data.
+### **Day 77: Implement CUDA-Optimized Attention-Based CTC Loss**
+- Implement a fast **Connectionist Temporal Classification (CTC) loss**.
 
-**Day 90: Bilateral Filtering on an Image**  
-Write a kernel that applies a bilateral filter to an image for edge-preserving smoothing. Validate against a CPU implementation.
+### **Day 78: Benchmark Speech Model Inference on CUDA**
+- Profile **latency and throughput** on CUDA.
 
-**Day 91: Median Filter for Noise Reduction**  
-Implement a median filter kernel for image noise reduction. Handle border conditions and compare with a CPU version.
+### **Day 79: Optimize Speech Model for Real-Time Inference**
+- Implement **low-latency optimizations**.
 
-**Day 92: k-Means Clustering for Image Segmentation**  
-Implement a kernel that performs k-means clustering on image pixel data. Iterate until cluster centers stabilize.
+### **Day 80: Deploy ASR Model on Multi-GPU Inference System**
+- Implement **multi-GPU inference using TensorRT**.
 
-**Day 93: Particle-Based Fluid Simulation – Core Kernel**  
-Implement a kernel that simulates fluid dynamics using a particle-based approach (update positions, velocities, and forces).
+---
 
-**Day 94: Optimize Fluid Simulation with Shared Memory and Tiling**  
-Refine your fluid simulation by organizing particles into tiles and using shared memory for neighbor searches.
+## **Days 81-90: CUDA-Optimized Video Processing & Streaming AI**
+Goal: Implement **real-time video super-resolution**.
 
-**Day 95: Matrix Inversion Kernel**  
-Implement a kernel that computes the inverse of a small matrix using an iterative method (e.g., Gauss-Jordan elimination).
+### **Day 81: Implement a CUDA-Optimized Video Frame Loader**
+- Implement **asynchronous video frame loading**.
 
-**Day 96: Singular Value Decomposition (SVD) for a Small Matrix**  
-Write a kernel that performs SVD on a small matrix. Validate the decomposition against a known library output.
+### **Day 82: Implement a Super-Resolution Kernel**
+- Implement **ESRGAN or EDSR** models on CUDA.
 
-**Day 97: Conjugate Gradient Solver for Linear Systems**  
-Implement a kernel to solve a linear system using the Conjugate Gradient method. Test with a symmetric positive-definite matrix.
+### **Day 83: Implement Motion Compensation with Optical Flow**
+- Implement **TV-L1 optical flow** in CUDA.
 
-**Day 98: Eigenvalue Computation Kernel**  
-Write a kernel to compute the eigenvalues (and optionally eigenvectors) of a small matrix using an iterative algorithm.
+### **Day 84: Optimize Video Inference with Tiling**
+- Process **large frames** efficiently using **tiled CUDA processing**.
 
-**Day 99: Custom Optimization Algorithm – Gradient Descent**  
-Implement a kernel that performs gradient descent on a mathematical function (e.g., quadratic) to find its minimum.
+### **Day 85: Implement Real-Time Video Enhancement**
+- Optimize **frame interpolation and denoising**.
 
-**Day 100: Final Integration Project**  
-Combine techniques from previous tasks to build a high-performance simulation or computation engine (e.g., a full fluid simulation, advanced ray tracer, or a machine learning inference engine). Integrate memory optimizations, dynamic parallelism, and multi-GPU support.
+### **Day 86: Implement CUDA-Accelerated Object Tracking**
+- Implement **Kalman filters** for **real-time object tracking**.
+
+### **Day 87: Optimize Video Processing Pipelines**
+- Implement **CUDA Streams** to process multiple frames in parallel.
+
+### **Day 88: Implement End-to-End Video Enhancement**
+- Build a **real-time AI-enhanced video streaming** pipeline.
+
+### **Day 89: Benchmark and Optimize Video Processing on CUDA**
+- Measure **FPS improvements with CUDA optimizations**.
+
+### **Day 90: Deploy Video AI Model with TensorRT**
+- Deploy the **video model on an edge device**.
+
+---
+
+## **Days 91-100: Build a Large-Scale CUDA-Optimized LLM Serving System**
+Goal: Implement **CUDA-optimized LLM inference** and deploy it.
+
+- **Days 91-94:** Implement KV cache for Transformer inference.
+- **Days 95-97:** Implement Tensor Parallelism for LLM inference.
+- **Days 98-99:** Optimize Memory and Load Balancing.
+- **Day 100:** Deploy LLM system with **CUDA-accelerated serving**.
+
+---
