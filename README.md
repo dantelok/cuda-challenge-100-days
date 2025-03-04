@@ -340,9 +340,64 @@ Goal: Implement **real-time video super-resolution**.
 ## **Days 91-100: Build a Large-Scale CUDA-Optimized LLM Serving System**
 Goal: Implement **CUDA-optimized LLM inference** and deploy it.
 
-- **Days 91-94:** Implement KV cache for Transformer inference.
-- **Days 95-97:** Implement Tensor Parallelism for LLM inference.
-- **Days 98-99:** Optimize Memory and Load Balancing.
-- **Day 100:** Deploy LLM system with **CUDA-accelerated serving**.
+## **Implement Key-Value (KV) Cache for Transformer Inference**
+-### **Day 91: Implement a Basic KV Cache in CUDA**
+- **Implement a kernel to store computed keys and values** in a cache.
+- Use **shared memory** for efficient access.
+- Verify that caching avoids recomputation.
+
+### **Day 92: Implement a CUDA-Optimized Sliding KV Cache**
+- Implement **sliding window caching** for long context inference.
+- Optimize memory layout for fast read/write access.
+- Use **warp-shuffle intrinsics** to accelerate cache operations.
+
+### **Day 93: Implement KV Cache Compression for Memory Efficiency**
+- Reduce memory footprint using **quantized KV caches**.
+- Implement **FP16 quantization** for KV cache storage.
+- Optimize **memory bandwidth** usage with **coalesced access**.
+
+### **Day 94: Implement Multi-GPU KV Cache Sharing**
+- Distribute KV cache across **multiple GPUs**.
+- Implement **cache lookup across devices**.
+- Optimize **inter-GPU communication** for KV cache updates.
+
+---
+
+## **Implement Tensor Parallelism for LLM Inference**
+Tensor parallelism **splits model computation** across multiple GPUs, enabling large-scale inference.
+
+### **Day 95: Implement Basic Tensor Parallelism for Matrix Multiplication**
+- Split **Transformer MLP & Attention computation** across GPUs.
+- Implement **tensor parallel matmul using `ncclAllReduce`**.
+
+### **Day 96: Optimize Multi-GPU Attention Mechanism**
+- Implement **multi-GPU softmax computation** with `NCCL` collectives.
+- Optimize **multi-GPU communication** to minimize latency.
+
+### **Day 97: Implement Inference Load Balancing with Tensor Parallelism**
+- Optimize **layer partitioning** across GPUs.
+- Implement **pipeline parallelism** to reduce memory bottlenecks.
+
+---
+
+## **Optimize Memory and Load Balancing for Large-Scale Inference**
+LLM serving requires **minimizing memory overhead and improving response time**.
+
+### **Day 98: Implement CUDA Graphs for Efficient LLM Execution**
+- Capture LLM inference as a **CUDA Graph**.
+- Reduce **kernel launch overhead** for real-time serving.
+- Optimize **graph memory allocation and reuse**.
+
+### **Day 99: Optimize GPU Memory Usage for Batched Inference**
+- Implement **batching techniques** for multi-user inference.
+- Optimize **activation recomputation** to reduce memory usage.
+
+---
+
+## **Day 100: Deploy the LLM System with CUDA-Accelerated Serving**
+🚀 **Final milestone: Deploy the entire CUDA-optimized LLM system.**
+- Integrate **TensorRT for model inference**.
+- Deploy a **real-time serving API**.
+- Benchmark performance on **real-world workloads**.
 
 ---
