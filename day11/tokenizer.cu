@@ -10,17 +10,16 @@
 #define MAX_WORD_LENGTH 12   // "programming" is the longest word
 #define MAX_SENTENCE_WORDS 10 // Maximum words expected in a sentence
 
-// Like a Python Dictionary
+// Hash Map for Vocabulary
 std::unordered_map<std::string, int> h_vocab = {
     {"I", 0}, {"love", 1}, {"CUDA", 2}, {"programming", 3}, {"and", 4}, {"deep", 5}, {"learning", 6}
 };
 
-// CUDA Constant Memory 
+// CUDA Constant Memory: Vocabulary
 __device__ __constant__ char d_vocab_words[7][MAX_WORD_LENGTH] = {"I", "love", "CUDA", "programming", "and", "deep", "learning"};
 __device__ __constant__ int d_vocab_ids[7] = {0, 1, 2, 3, 4, 5, 6};
 
-//CPU Tokenizer
-//TODO:: need to change the output back to token_ids
+// **CPU Tokenization - Now Preprocessing Sentence into Word Array**
 void tokenize_cpu(const std::string &sentence, std::vector<std::string> &words) {
     std::istringstream iss(sentence);
     std::string word;
@@ -37,7 +36,6 @@ __device__ int strcmp_cuda(const char *str1, const char *str2) {
     return *(unsigned char *)str1 - *(unsigned char *)str2;
 }
 
-// GPU tokenizer
 __global__ void tokenize_gpu(char d_sentence[MAX_SENTENCE_WORDS][MAX_WORD_LENGTH], int *token_ids, int word_count, int vocab_size) {
     int id = threadIdx.x;
     if (id >= word_count) return;
@@ -51,7 +49,7 @@ __global__ void tokenize_gpu(char d_sentence[MAX_SENTENCE_WORDS][MAX_WORD_LENGTH
 
     // printf("GPU Extracted Word [%d]: %s\n", id, word);
 
-    // Compare with Vocabulary
+    // **Compare with Vocabulary
     int found = -1;
     for (int v = 0; v < vocab_size; v++) {
         if (strcmp_cuda(word, d_vocab_words[v]) == 0) {
@@ -99,16 +97,16 @@ int main() {
     cudaMemcpy(d_sentence, h_sentence, MAX_SENTENCE_WORDS * MAX_WORD_LENGTH * sizeof(char), cudaMemcpyHostToDevice);
 
     printf("Start GPU Tokenizer...\n");
-    start_time = get_time();
+    double start_time = get_time();
     tokenize_gpu<<<1, word_count>>>(d_sentence, d_token_ids, word_count, 7);
     cudaDeviceSynchronize();
     double gpu_time = get_time() - start_time;
 
-    // Copy results back to host
+    // Copy Back Results
     int *h_token_ids = (int *)malloc(word_count * sizeof(int));
     cudaMemcpy(h_token_ids, d_token_ids, word_count * sizeof(int), cudaMemcpyDeviceToHost);
 
-    // Verify GPU Output
+    // Print GPU Output
     printf("GPU Tokenized Output: ");
     for (int i = 0; i < word_count; i++) printf("%d ", h_token_ids[i]);
     printf("\nGPU Execution Time: %f ms\n", gpu_time * 1000);
